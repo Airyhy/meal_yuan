@@ -26,56 +26,152 @@
       </div>
     </header>
 
-    <main class="container materials-main">
-      <div class="materials-layout">
-        <!-- Left Sidebar Navigation -->
-        <nav class="materials-sidebar">
-          <div class="sidebar-header">Status Filter</div>
-          <a href="#all" class="sidebar-link active" data-status="all">
-            <span class="sidebar-icon">📋</span>
-            <span class="sidebar-text">All Items</span>
-          </a>
-          <a href="#need-to-buy" class="sidebar-link" data-status="available">
-            <span class="sidebar-icon">🛒</span>
-            <span class="sidebar-text">Need to Buy</span>
-          </a>
-          <a href="#already-have" class="sidebar-link" data-status="have">
-            <span class="sidebar-icon">🏠</span>
-            <span class="sidebar-text">Already Have</span>
-          </a>
-          <a href="#removed" class="sidebar-link" data-status="removed">
-            <span class="sidebar-icon">🗑️</span>
-            <span class="sidebar-text">Removed</span>
-          </a>
-          <div class="sidebar-divider"></div>
-          <div class="sidebar-header">Store Filter</div>
-          <div class="sidebar-filters" id="store-filter">
-            <button class="sidebar-filter active" data-store="all">
-              <span>🏪</span>
-              <span>All</span>
-            </button>
-            <button class="sidebar-filter" data-store="Whole Foods">
-              <span style="background: #00674f; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">WF</span>
-              <span>WF</span>
-            </button>
-            <button class="sidebar-filter" data-store="Safeway">
-              <span style="background: #e31837; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">S</span>
-              <span>Safeway</span>
-            </button>
-            <button class="sidebar-filter" data-store="Ranch99">
-              <span style="background: #ff9500; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">99</span>
-              <span>Ranch 99</span>
-            </button>
-            <button class="sidebar-filter" data-store="Trader Joe's">
-              <span style="background: #007A87; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; font-weight: 700;">TJ</span>
-              <span>Trader Joe's</span>
+    <main class="materials-page">
+      <div class="materials-container">
+        <!-- Left Sidebar -->
+        <aside class="materials-sidebar-new">
+          <div class="sidebar-section">
+            <div class="sidebar-section-header">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="opacity: 0.5;">
+                <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+              </svg>
+              <span>STATUSES</span>
+            </div>
+            <div class="status-links">
+              <button class="status-link active" data-status="available">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                </svg>
+                <span>Available</span>
+                <span class="count" id="count-available">0</span>
+              </button>
+              <button class="status-link" data-status="have">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+                <span>Owned</span>
+                <span class="count" id="count-have">0</span>
+              </button>
+              <button class="status-link" data-status="removed">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                </svg>
+                <span>Removed</span>
+                <span class="count" id="count-removed">0</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="sidebar-section">
+            <div class="sidebar-section-header">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="opacity: 0.5;">
+                <path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z"/>
+              </svg>
+              <span>STORE FILTER</span>
+            </div>
+            <div class="store-links" id="store-filter">
+              <button class="store-link active" data-store="all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
+                </svg>
+                <span>All</span>
+              </button>
+              <button class="store-link" data-store="Whole Foods">
+                <span class="store-badge wf-badge">WF</span>
+                <span>WF</span>
+              </button>
+              <button class="store-link" data-store="Safeway">
+                <span class="store-badge s-badge">S</span>
+                <span>Safeway</span>
+              </button>
+              <button class="store-link" data-store="Ranch99">
+                <span class="store-badge r99-badge">99</span>
+                <span>Ranch 99</span>
+              </button>
+              <button class="store-link" data-store="Trader Joe's">
+                <span class="store-badge tj-badge">TJ</span>
+                <span>Trader Joe's</span>
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="materials-main-content">
+          <!-- Top Bar with Search and Add -->
+          <div class="materials-top-bar">
+            <div class="search-box">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="opacity: 0.5;">
+                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+              </svg>
+              <input type="text" id="search-input" placeholder="Search..." />
+            </div>
+            <button class="btn-add-material" onclick="openAddMaterialModal()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+              </svg>
+              Add Material
             </button>
           </div>
-        </nav>
 
-        <!-- Main Content Area -->
-        <div class="materials-content">
-          <div id="materials-grid" class="modern-materials-grid"></div>
+          <!-- Materials Grid -->
+          <div id="materials-grid"></div>
+        </div>
+      </div>
+
+      <!-- Add Material Modal -->
+      <div id="add-material-modal" class="modal-overlay">
+        <div class="modal-content-new">
+          <div class="modal-header">
+            <h2>Add New Material</h2>
+            <button class="modal-close" onclick="closeAddMaterialModal()">×</button>
+          </div>
+          <form id="add-material-form" onsubmit="submitAddMaterial(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>中文名称 / Chinese Name *</label>
+                <input type="text" id="material-name-cn" required />
+              </div>
+              <div class="form-group">
+                <label>English Name *</label>
+                <input type="text" id="material-name-en" required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Brand</label>
+                <input type="text" id="material-brand" />
+              </div>
+              <div class="form-group">
+                <label>Unit</label>
+                <input type="text" id="material-unit" placeholder="e.g., 1 lb, 12 oz" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Store *</label>
+                <select id="material-store" required>
+                  <option value="">Select a store</option>
+                  <option value="Whole Foods">Whole Foods</option>
+                  <option value="Safeway">Safeway</option>
+                  <option value="Ranch99">Ranch 99</option>
+                  <option value="Trader Joe's">Trader Joe's</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Price *</label>
+                <input type="number" id="material-price" step="0.01" min="0" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Image URL (optional)</label>
+              <input type="url" id="material-image" placeholder="https://example.com/image.jpg" />
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn-cancel" onclick="closeAddMaterialModal()">Cancel</button>
+              <button type="submit" class="btn-submit">Add Material</button>
+            </div>
+          </form>
         </div>
       </div>
 

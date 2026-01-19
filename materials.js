@@ -1,19 +1,19 @@
 function initPage() {
   const materialsGrid = document.getElementById("materials-grid");
   const storeFilter = document.getElementById("store-filter");
-  const storeButtons = storeFilter.querySelectorAll(".sidebar-filter");
+  const storeButtons = storeFilter.querySelectorAll(".store-link");
   
-  // Add status filter to section links
-  document.querySelectorAll('.sidebar-link').forEach(link => {
+  // Add status filter to status links
+  document.querySelectorAll('.status-link').forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
       
       // Update active state
-      document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+      document.querySelectorAll('.status-link').forEach(l => l.classList.remove('active'));
       link.classList.add('active');
       
       // Set status filter from data attribute
-      currentStatus = link.dataset.status || 'all';
+      currentStatus = link.dataset.status || 'available';
       
       // Apply filters
       applyFilters();
@@ -118,139 +118,113 @@ function initPage() {
   }
 
   let currentStore = "all";
-  let currentStatus = "all"; // Track current status filter
+  let currentStatus = "available"; // Track current status filter (default to available)
+  let searchQuery = ""; // Track search query
 
   function formatPrice(price) {
     return `$${price.toFixed(2)}`;
   }
 
+  function updateSidebarCounts() {
+    // Filter by current store selection
+    const materialsInStore = currentStore === "all" 
+      ? MATERIALS 
+      : MATERIALS.filter(item => item.store === currentStore);
+    
+    // Update counts based on current store filter
+    const availableCount = materialsInStore.filter(item => 
+      !allRemovedIds.has(item.id) && !isAlreadyHave(item.id)
+    ).length;
+    
+    const haveCount = materialsInStore.filter(item => 
+      !allRemovedIds.has(item.id) && isAlreadyHave(item.id)
+    ).length;
+    
+    const removedCount = materialsInStore.filter(item => 
+      allRemovedIds.has(item.id)
+    ).length;
+
+    const countAvailable = document.getElementById('count-available');
+    const countHave = document.getElementById('count-have');
+    const countRemoved = document.getElementById('count-removed');
+
+    if (countAvailable) countAvailable.textContent = availableCount;
+    if (countHave) countHave.textContent = haveCount;
+    if (countRemoved) countRemoved.textContent = removedCount;
+  }
+
   function renderMaterialsGrid(items) {
+    // Update sidebar counts
+    updateSidebarCounts();
+
     // Check if data is completely missing (error state)
     if (!items) {
-      materialsGrid.innerHTML =
-        "<p style='text-align: center; color: #d32f2f; padding: 40px;'>❌ 数据加载失败，请刷新页面 / Data failed to load, please refresh.</p>";
+      materialsGrid.innerHTML = `
+        <div class="empty-state-new">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+          </svg>
+          <h3>数据加载失败 / Data Failed to Load</h3>
+          <p>请刷新页面 / Please refresh the page</p>
+        </div>
+      `;
       return;
     }
     
     // Check if filter resulted in no items (normal state)
     if (items.length === 0) {
       const statusMessages = {
-        'all': '暂无材料 / No materials available',
-        'available': '🎉 没有需要购买的材料！/ No items to buy!',
-        'have': '暂无已有材料 / No items marked as owned yet',
-        'removed': '暂无移除材料 / No items removed from recipes'
+        'available': { title: 'No Items to Buy', subtitle: '🎉 You have everything you need!' },
+        'have': { title: 'No Owned Items', subtitle: 'Mark items as owned to see them here' },
+        'removed': { title: 'No Removed Items', subtitle: 'Remove items from recipes to see them here' }
       };
       
-      const message = statusMessages[currentStatus] || statusMessages['all'];
+      const message = statusMessages[currentStatus] || { title: 'No Items Found', subtitle: 'Try a different filter combination' };
       
       materialsGrid.innerHTML = `
-        <div style="text-align: center; padding: 60px 20px; color: #8a7f6f;">
-          <div style="font-size: 3rem; margin-bottom: 16px;">🔍</div>
-          <h3 style="font-size: 1.2rem; color: #5a4f42; margin: 0 0 8px 0;">${message}</h3>
-          <p style="font-size: 0.9rem; color: #9e9186;">Try selecting a different filter combination</p>
+        <div class="empty-state-new">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+          </svg>
+          <h3>${message.title}</h3>
+          <p>${message.subtitle}</p>
         </div>
       `;
       return;
     }
 
-    // Split materials into three categories
-    const availableMaterials = items.filter(item => 
-      !allRemovedIds.has(item.id) && !isAlreadyHave(item.id)
-    );
-    const alreadyHaveMaterials = items.filter(item => 
-      !allRemovedIds.has(item.id) && isAlreadyHave(item.id)
-    );
-    const removedMaterials = items.filter(item => allRemovedIds.has(item.id));
-
-    let html = '';
-
-    // Need to Buy materials section
-    if (availableMaterials.length > 0) {
-      html += `
-        <div id="need-to-buy" class="materials-section available-section">
-          <div class="section-header">
-            <div class="section-icon">🛒</div>
-            <div class="section-info">
-              <h2 class="section-title">Need to Buy / 需要购买</h2>
-              <p class="section-count">${availableMaterials.length} items · Items to purchase</p>
-            </div>
-          </div>
-          <div class="materials-grid-inner">
-            ${availableMaterials.map(item => renderMaterialCard(item, 'available')).join('')}
-          </div>
-        </div>
-      `;
-    }
-
-    // Already Have materials section
-    if (alreadyHaveMaterials.length > 0) {
-      html += `
-        <div id="already-have" class="materials-section already-have-section">
-          <div class="section-header">
-            <div class="section-icon">🏠</div>
-            <div class="section-info">
-              <h2 class="section-title">Already Have / 已有</h2>
-              <p class="section-count">${alreadyHaveMaterials.length} items · Items you own at home</p>
-            </div>
-          </div>
-          <div class="materials-grid-inner">
-            ${alreadyHaveMaterials.map(item => renderMaterialCard(item, 'have')).join('')}
-          </div>
-        </div>
-      `;
-    }
-
-    // Removed materials section
-    if (removedMaterials.length > 0) {
-      html += `
-        <div id="removed" class="materials-section removed-section">
-          <div class="section-header">
-            <div class="section-icon">🗑️</div>
-            <div class="section-info">
-              <h2 class="section-title">Removed / 已移除</h2>
-              <p class="section-count">${removedMaterials.length} items · Removed from dish recipes</p>
-            </div>
-          </div>
-          <div class="materials-grid-inner">
-            ${removedMaterials.map(item => renderMaterialCard(item, 'removed')).join('')}
-          </div>
-        </div>
-      `;
-    }
-
-    materialsGrid.innerHTML = html;
+    // Render cards directly without section header
+    materialsGrid.innerHTML = items.map(item => renderMaterialCard(item, currentStatus)).join('');
   }
 
   function renderMaterialCard(item, status) {
     const isPermanent = isPermanentlyOwned(item.id);
     const dishesUsingMaterial = status === 'removed' ? getDishesUsingMaterial(item.id) : [];
     
+    const statusBadges = {
+      'available': { class: 'available', text: 'Available' },
+      'have': { class: 'owned', text: isPermanent ? '🔒 Owned' : 'Owned' },
+      'removed': { class: 'removed', text: 'Removed' }
+    };
+    
+    const badge = statusBadges[status] || statusBadges['available'];
+    
     return `
-      <article class="material-card card-${status}" data-store="${item.store}">
-        ${status === 'have' && isPermanent ? `
-          <div class="status-badge permanent-badge">
-            🔒 永久已有
-          </div>
-        ` : status === 'have' ? `
-          <div class="status-badge have-badge">
-            ✓ 已有
-          </div>
-        ` : ''}
-        <img src="${item.image}" alt="${item.nameEn}" />
-        <div class="material-body">
-          <h3>${item.nameCn} / ${item.nameEn}</h3>
-          <p class="material-brand">${item.brand || ""} ${item.unit ? `· ${item.unit}` : ""}</p>
-          <p class="material-store">${STORE_LABELS[item.store] || item.store}</p>
-          <p class="material-price">${formatPrice(item.price)}</p>
-          ${status === 'removed' ? `
-            <div class="removed-info">
-              <p class="removed-from">从以下菜谱移除 / Removed from:</p>
-              <p class="removed-dishes">${dishesUsingMaterial.join(', ')}</p>
-              <button class="btn-restore-material" onclick="restoreMaterial('${item.id}')">
-                ↩️ 恢复 / Restore
+      <article class="material-card-new" data-store="${item.store}">
+        <img class="material-card-image" src="${item.image}" alt="${item.nameEn}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'200\\' height=\\'200\\'%3E%3Crect fill=\\'%23f0f0f0\\' width=\\'200\\' height=\\'200\\'/%3E%3Ctext x=\\'50%25\\' y=\\'50%25\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' font-size=\\'14\\' fill=\\'%23999\\'%3ENo Image%3C/text%3E%3C/svg%3E'">
+        <div class="material-card-body">
+          <h3 class="material-card-title">${item.nameCn} / ${item.nameEn}</h3>
+          <p class="material-card-brand">${item.brand || "Generic"} ${item.unit ? `· ${item.unit}` : ""}</p>
+          <span class="material-card-store">${STORE_LABELS[item.store] || item.store}</span>
+          <div class="material-card-price">${formatPrice(item.price)}</div>
+          <div class="material-card-footer">
+            <span class="material-status-badge ${badge.class}">${badge.text}</span>
+            ${status === 'removed' ? `
+              <button class="material-card-btn primary" onclick="restoreMaterial('${item.id}')">
+                Restore
               </button>
-            </div>
-          ` : ''}
+            ` : ''}
+          </div>
         </div>
       </article>
     `;
@@ -298,20 +272,26 @@ function initPage() {
       ? MATERIALS 
       : MATERIALS.filter((item) => item.store === currentStore);
     
-    // Then filter by status if needed
-    if (currentStatus !== 'all') {
+    // Then filter by status
+    filtered = filtered.filter(item => {
+      const isRemoved = allRemovedIds.has(item.id);
+      const hasItem = isAlreadyHave(item.id);
+      
+      if (currentStatus === 'available') {
+        return !isRemoved && !hasItem;
+      } else if (currentStatus === 'have') {
+        return !isRemoved && hasItem;
+      } else if (currentStatus === 'removed') {
+        return isRemoved;
+      }
+      return true;
+    });
+    
+    // Then filter by search query
+    if (searchQuery) {
       filtered = filtered.filter(item => {
-        const isRemoved = allRemovedIds.has(item.id);
-        const hasItem = isAlreadyHave(item.id);
-        
-        if (currentStatus === 'available') {
-          return !isRemoved && !hasItem;
-        } else if (currentStatus === 'have') {
-          return !isRemoved && hasItem;
-        } else if (currentStatus === 'removed') {
-          return isRemoved;
-        }
-        return true;
+        const searchStr = `${item.nameCn} ${item.nameEn} ${item.brand}`.toLowerCase();
+        return searchStr.includes(searchQuery);
       });
     }
     
@@ -333,7 +313,7 @@ function initPage() {
     applyFilters();
   }
 
-  // Add click handlers to filter pills
+  // Add click handlers to store filters
   storeButtons.forEach(button => {
     button.addEventListener("click", () => {
       const store = button.dataset.store;
@@ -341,8 +321,78 @@ function initPage() {
     });
   });
 
-  renderMaterialsGrid(MATERIALS);
+  // Add search functionality
+  const searchInput = document.getElementById('search-input');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value.toLowerCase().trim();
+      applyFilters();
+    });
+  }
+
+  // Initialize with default view
+  applyFilters();
 }
+
+// Add Material Modal Functions
+window.openAddMaterialModal = function() {
+  const modal = document.getElementById('add-material-modal');
+  if (modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+};
+
+window.closeAddMaterialModal = function() {
+  const modal = document.getElementById('add-material-modal');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+    document.getElementById('add-material-form').reset();
+  }
+};
+
+window.submitAddMaterial = function(event) {
+  event.preventDefault();
+  
+  const nameCn = document.getElementById('material-name-cn').value.trim();
+  const nameEn = document.getElementById('material-name-en').value.trim();
+  const brand = document.getElementById('material-brand').value.trim() || 'Generic';
+  const unit = document.getElementById('material-unit').value.trim() || '1 unit';
+  const store = document.getElementById('material-store').value;
+  const price = parseFloat(document.getElementById('material-price').value);
+  const image = document.getElementById('material-image').value.trim() || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'200\'%3E%3Crect fill=\'%23f0f0f0\' width=\'200\' height=\'200\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'14\' fill=\'%23999\'%3ENo Image%3C/text%3E%3C/svg%3E';
+  
+  // Create new material object
+  const newMaterial = {
+    id: `manual-${Date.now()}`,
+    nameCn: nameCn,
+    nameEn: nameEn,
+    brand: brand,
+    unit: unit,
+    store: store,
+    price: price,
+    image: image
+  };
+  
+  // Add to window.DATA.MATERIALS
+  if (window.DATA && window.DATA.MATERIALS) {
+    window.DATA.MATERIALS.push(newMaterial);
+    
+    // Save to localStorage
+    const savedManualMaterials = localStorage.getItem('manualMaterials');
+    const manualMaterials = savedManualMaterials ? JSON.parse(savedManualMaterials) : [];
+    manualMaterials.push(newMaterial);
+    localStorage.setItem('manualMaterials', JSON.stringify(manualMaterials));
+    
+    // Show success message
+    alert(`✅ 材料已添加 / Material added: ${nameCn}`);
+    
+    // Close modal and refresh
+    closeAddMaterialModal();
+    location.reload();
+  }
+};
 
 // Wait for both DOM and data to be ready
 function tryInitPage() {
