@@ -1,39 +1,4 @@
-function createMaterialImage(label, brand, store) {
-  const safeLabel = label.replace(/&/g, "&amp;").replace(/</g, "&lt;");
-  const safeBrand = brand.replace(/&/g, "&amp;").replace(/</g, "&lt;");
-  
-  // Color scheme by store
-  const colors = {
-    "Whole Foods": { start: "#00674f", end: "#008566", text: "#ffffff" },
-    Safeway: { start: "#e31837", end: "#c41230", text: "#ffffff" },
-    Ranch99: { start: "#d4262a", end: "#a81e21", text: "#ffffff" }
-  };
-  
-  const storeColors = colors[store] || { start: "#f5e6cf", end: "#e0c7a2", text: "#5a4a3a" };
-  
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="600" height="420">
-      <defs>
-        <linearGradient id="bg-${store.replace(/\s/g, '')}" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%" stop-color="${storeColors.start}" />
-          <stop offset="100%" stop-color="${storeColors.end}" />
-        </linearGradient>
-      </defs>
-      <rect width="600" height="420" fill="url(#bg-${store.replace(/\s/g, '')})" />
-      <rect x="30" y="30" width="540" height="360" rx="20" fill="rgba(255,255,255,0.95)" />
-      <text x="300" y="160" font-size="32" font-weight="600" text-anchor="middle" fill="#2d2d2d" font-family="Arial, sans-serif">
-        ${safeBrand}
-      </text>
-      <text x="300" y="220" font-size="28" text-anchor="middle" fill="#5a4a3a" font-family="Arial, sans-serif">
-        ${safeLabel}
-      </text>
-      <text x="300" y="350" font-size="18" text-anchor="middle" fill="#888" font-family="Arial, sans-serif">
-        ${store}
-      </text>
-    </svg>
-  `.trim();
-  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
-}
+console.log('data.js: Starting to load...');
 
 const MATERIALS = [
   {
@@ -44,7 +9,7 @@ const MATERIALS = [
     store: "Whole Foods",
     price: 3.49,
     unit: "14 oz",
-    image: createMaterialImage("Soft Tofu", "365 by Whole Foods", "Whole Foods")
+    image: "assets/materials/tofu.jpg"
   },
   {
     id: "ground-pork",
@@ -54,7 +19,7 @@ const MATERIALS = [
     store: "Whole Foods",
     price: 6.99,
     unit: "1 lb",
-    image: createMaterialImage("Ground Pork", "Whole Foods Market", "Whole Foods")
+    image: "https://images.unsplash.com/photo-1602470520998-f4a52199a3d6?w=800&h=600&fit=crop"
   },
   {
     id: "scallion",
@@ -64,7 +29,7 @@ const MATERIALS = [
     store: "Whole Foods",
     price: 1.49,
     unit: "1 bunch",
-    image: createMaterialImage("Green Onions", "Organic Produce", "Whole Foods")
+    image: "https://images.unsplash.com/photo-1629798787078-0c59e88aeb73?w=800&h=600&fit=crop"
   },
   {
     id: "garlic",
@@ -74,7 +39,7 @@ const MATERIALS = [
     store: "Whole Foods",
     price: 0.99,
     unit: "1 bulb",
-    image: createMaterialImage("Garlic", "Fresh Produce", "Whole Foods")
+    image: "assets/materials/garlic.jpg"
   },
   {
     id: "ginger",
@@ -84,7 +49,7 @@ const MATERIALS = [
     store: "Whole Foods",
     price: 1.29,
     unit: "per lb",
-    image: createMaterialImage("Fresh Ginger", "Organic Produce", "Whole Foods")
+    image: "assets/materials/ginger.jpg"
   },
   {
     id: "chicken-thighs",
@@ -94,7 +59,7 @@ const MATERIALS = [
     store: "Whole Foods",
     price: 8.99,
     unit: "per lb",
-    image: createMaterialImage("Chicken Thighs", "Whole Foods Market", "Whole Foods")
+    image: "https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=800&h=600&fit=crop"
   },
   {
     id: "eggs",
@@ -104,7 +69,7 @@ const MATERIALS = [
     store: "Whole Foods",
     price: 4.99,
     unit: "12 ct",
-    image: createMaterialImage("Large Eggs", "365 Organic", "Whole Foods")
+    image: "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=800&h=600&fit=crop"
   },
   {
     id: "roma-tomato",
@@ -114,7 +79,7 @@ const MATERIALS = [
     store: "Whole Foods",
     price: 3.59,
     unit: "per lb",
-    image: createMaterialImage("Roma Tomatoes", "Fresh Produce", "Whole Foods")
+    image: "assets/materials/tomatoes.jpg"
   },
   {
     id: "ground-beef",
@@ -124,7 +89,7 @@ const MATERIALS = [
     store: "Whole Foods",
     price: 7.99,
     unit: "per lb",
-    image: createMaterialImage("Ground Beef", "Whole Foods Market", "Whole Foods")
+    image: "assets/materials/ground-beef.jpg"
   },
   {
     id: "parsley",
@@ -134,7 +99,7 @@ const MATERIALS = [
     store: "Whole Foods",
     price: 1.79,
     unit: "1 bunch",
-    image: createMaterialImage("Fresh Parsley", "Organic Produce", "Whole Foods")
+    image: "assets/materials/parsley.jpg"
   },
   {
     id: "chicken-breast",
@@ -144,7 +109,7 @@ const MATERIALS = [
     store: "Whole Foods",
     price: 9.49,
     unit: "per lb",
-    image: createMaterialImage("Chicken Breast", "Whole Foods Market", "Whole Foods")
+    image: "https://images.unsplash.com/photo-1604503428506-a8da13d82791?w=800&h=600&fit=crop"
   },
   {
     id: "butter",
@@ -154,7 +119,7 @@ const MATERIALS = [
     store: "Whole Foods",
     price: 4.29,
     unit: "16 oz",
-    image: createMaterialImage("Unsalted Butter", "365 by Whole Foods", "Whole Foods")
+    image: "assets/materials/butter.jpg"
   },
   {
     id: "lemon",
@@ -164,7 +129,7 @@ const MATERIALS = [
     store: "Whole Foods",
     price: 0.89,
     unit: "each",
-    image: createMaterialImage("Lemons", "Fresh Produce", "Whole Foods")
+    image: "https://images.unsplash.com/photo-1590502593747-42a996133562?w=800&h=600&fit=crop"
   },
   {
     id: "cornstarch",
@@ -174,7 +139,7 @@ const MATERIALS = [
     store: "Safeway",
     price: 2.99,
     unit: "16 oz",
-    image: createMaterialImage("Cornstarch", "Signature SELECT", "Safeway")
+    image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800&h=600&fit=crop"
   },
   {
     id: "chicken-broth",
@@ -184,7 +149,7 @@ const MATERIALS = [
     store: "Safeway",
     price: 3.49,
     unit: "32 oz",
-    image: createMaterialImage("Chicken Broth", "Signature SELECT", "Safeway")
+    image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800&h=600&fit=crop"
   },
   {
     id: "canola-oil",
@@ -194,7 +159,7 @@ const MATERIALS = [
     store: "Safeway",
     price: 7.99,
     unit: "48 oz",
-    image: createMaterialImage("Canola Oil", "O Organics", "Safeway")
+    image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=800&h=600&fit=crop"
   },
   {
     id: "roasted-peanuts",
@@ -204,7 +169,7 @@ const MATERIALS = [
     store: "Safeway",
     price: 5.99,
     unit: "16 oz",
-    image: createMaterialImage("Roasted Peanuts", "Signature SELECT", "Safeway")
+    image: "https://images.unsplash.com/photo-1582437386721-34c1c2589a83?w=800&h=600&fit=crop"
   },
   {
     id: "soy-sauce",
@@ -214,7 +179,7 @@ const MATERIALS = [
     store: "Safeway",
     price: 4.49,
     unit: "15 oz",
-    image: createMaterialImage("Soy Sauce", "Kikkoman", "Safeway")
+    image: "https://images.unsplash.com/photo-1586985064044-8c3b5c36df76?w=800&h=600&fit=crop"
   },
   {
     id: "sugar",
@@ -224,7 +189,7 @@ const MATERIALS = [
     store: "Safeway",
     price: 3.99,
     unit: "4 lbs",
-    image: createMaterialImage("Granulated Sugar", "C&H", "Safeway")
+    image: "https://images.unsplash.com/photo-1587228060-59e4ef64f5c5?w=800&h=600&fit=crop"
   },
   {
     id: "tomato-paste",
@@ -234,7 +199,7 @@ const MATERIALS = [
     store: "Safeway",
     price: 2.29,
     unit: "12 oz",
-    image: createMaterialImage("Tomato Paste", "Contadina", "Safeway")
+    image: "https://images.unsplash.com/photo-1598164888914-e6c4c8d8d1a3?w=800&h=600&fit=crop"
   },
   {
     id: "breadcrumbs",
@@ -244,7 +209,7 @@ const MATERIALS = [
     store: "Safeway",
     price: 3.99,
     unit: "15 oz",
-    image: createMaterialImage("Breadcrumbs", "Progresso", "Safeway")
+    image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&h=600&fit=crop"
   },
   {
     id: "olive-oil",
@@ -254,7 +219,7 @@ const MATERIALS = [
     store: "Safeway",
     price: 12.99,
     unit: "25.5 oz",
-    image: createMaterialImage("Olive Oil", "O Organics", "Safeway")
+    image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=800&h=600&fit=crop&q=80"
   },
   {
     id: "paprika",
@@ -264,7 +229,7 @@ const MATERIALS = [
     store: "Safeway",
     price: 2.99,
     unit: "2.12 oz",
-    image: createMaterialImage("Paprika", "Signature SELECT", "Safeway")
+    image: "https://images.unsplash.com/photo-1599909533872-c97725f38dc7?w=800&h=600&fit=crop"
   },
   {
     id: "black-pepper",
@@ -274,7 +239,7 @@ const MATERIALS = [
     store: "Safeway",
     price: 4.49,
     unit: "4 oz",
-    image: createMaterialImage("Black Pepper", "Signature SELECT", "Safeway")
+    image: "https://images.unsplash.com/photo-1596040033229-a0b55ee0a8ec?w=800&h=600&fit=crop"
   },
   {
     id: "doubanjiang",
@@ -284,7 +249,7 @@ const MATERIALS = [
     store: "Ranch99",
     price: 4.99,
     unit: "16 oz",
-    image: createMaterialImage("Doubanjiang", "Juancheng", "Ranch99")
+    image: "https://images.unsplash.com/photo-1599909533872-c97725f38dc7?w=800&h=600&fit=crop&q=80&sat=-20"
   },
   {
     id: "sichuan-pepper",
@@ -294,7 +259,7 @@ const MATERIALS = [
     store: "Ranch99",
     price: 5.99,
     unit: "2 oz",
-    image: createMaterialImage("Sichuan Peppercorns", "Mala Market", "Ranch99")
+    image: "https://images.unsplash.com/photo-1596040033229-a0b55ee0a8ec?w=800&h=600&fit=crop&hue=30"
   },
   {
     id: "chili-oil",
@@ -304,7 +269,7 @@ const MATERIALS = [
     store: "Ranch99",
     price: 3.99,
     unit: "7.41 oz",
-    image: createMaterialImage("Chili Oil", "Lao Gan Ma", "Ranch99")
+    image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=800&h=600&fit=crop&hue=10"
   },
   {
     id: "dried-chilies",
@@ -314,7 +279,7 @@ const MATERIALS = [
     store: "Ranch99",
     price: 3.49,
     unit: "4 oz",
-    image: createMaterialImage("Dried Chilies", "Sichuan Brand", "Ranch99")
+    image: "https://images.unsplash.com/photo-1583202925739-250942342e4e?w=800&h=600&fit=crop"
   },
   {
     id: "black-vinegar",
@@ -324,7 +289,7 @@ const MATERIALS = [
     store: "Ranch99",
     price: 4.29,
     unit: "18.6 oz",
-    image: createMaterialImage("Black Vinegar", "Gold Plum", "Ranch99")
+    image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800&h=600&fit=crop&sat=-30"
   },
   {
     id: "shaoxing",
@@ -334,7 +299,7 @@ const MATERIALS = [
     store: "Ranch99",
     price: 5.49,
     unit: "25.4 oz",
-    image: createMaterialImage("Shaoxing Wine", "Pagoda", "Ranch99")
+    image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800&h=600&fit=crop"
   },
   {
     id: "white-pepper",
@@ -344,7 +309,7 @@ const MATERIALS = [
     store: "Ranch99",
     price: 3.99,
     unit: "4 oz",
-    image: createMaterialImage("White Pepper", "Spice King", "Ranch99")
+    image: "https://images.unsplash.com/photo-1596040033229-a0b55ee0a8ec?w=800&h=600&fit=crop&sat=-50"
   },
   {
     id: "light-soy",
@@ -354,7 +319,7 @@ const MATERIALS = [
     store: "Ranch99",
     price: 3.49,
     unit: "16.9 oz",
-    image: createMaterialImage("Light Soy Sauce", "Lee Kum Kee", "Ranch99")
+    image: "https://images.unsplash.com/photo-1586985064044-8c3b5c36df76?w=800&h=600&fit=crop&sat=-30"
   },
   {
     id: "oregano",
@@ -364,7 +329,7 @@ const MATERIALS = [
     store: "Ranch99",
     price: 4.99,
     unit: "3 oz",
-    image: createMaterialImage("Oregano", "McCormick", "Ranch99")
+    image: "https://images.unsplash.com/photo-1515694590451-e33a61ab6f11?w=800&h=600&fit=crop"
   },
   {
     id: "chili-flakes",
@@ -374,7 +339,7 @@ const MATERIALS = [
     store: "Ranch99",
     price: 2.99,
     unit: "1 oz",
-    image: createMaterialImage("Chili Flakes", "Dynasty", "Ranch99")
+    image: "https://images.unsplash.com/photo-1599909533872-c97725f38dc7?w=800&h=600&fit=crop&hue=10"
   },
   {
     id: "sea-salt",
@@ -384,7 +349,7 @@ const MATERIALS = [
     store: "Ranch99",
     price: 3.49,
     unit: "26 oz",
-    image: createMaterialImage("Sea Salt", "Diamond Crystal", "Ranch99")
+    image: "https://images.unsplash.com/photo-1587228060-59e4ef64f5c5?w=800&h=600&fit=crop&sat=-80"
   },
   {
     id: "thyme",
@@ -394,7 +359,7 @@ const MATERIALS = [
     store: "Ranch99",
     price: 4.49,
     unit: "0.7 oz",
-    image: createMaterialImage("Thyme", "Spice Islands", "Ranch99")
+    image: "https://images.unsplash.com/photo-1515694590451-e33a61ab6f11?w=800&h=600&fit=crop&hue=30"
   }
 ];
 
@@ -565,3 +530,5 @@ window.DATA = {
   MATERIALS,
   DISHES
 };
+
+console.log('data.js: Finished loading. Materials count:', MATERIALS.length, 'Dishes count:', DISHES.length);

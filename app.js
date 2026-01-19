@@ -94,6 +94,12 @@ const STORE_LABELS = {
   Ranch99: "Ranch 99 / 大华超市"
 };
 
+const STORE_COLORS = {
+  "Whole Foods": "#00674f",
+  Safeway: "#e31837",
+  Ranch99: "#ff9500"
+};
+
 function renderSteps(steps) {
   const sections = Object.entries(STEP_TITLES)
     .map(([key, title]) => {

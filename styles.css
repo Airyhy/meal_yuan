@@ -228,6 +228,26 @@ button#view-dish {
   align-items: flex-end;
 }
 
+.store-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #5a4a3a;
+  font-weight: 500;
+}
+
+.legend-item svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+}
+
 .materials-filter {
   display: flex;
   flex-direction: column;
@@ -258,16 +278,80 @@ button#view-dish {
 .material-card {
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid rgba(214, 185, 143, 0.5);
+  border: 3px solid rgba(214, 185, 143, 0.5);
   background: #fffaf2;
   box-shadow: 0 10px 24px rgba(90, 70, 40, 0.12);
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.material-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(90, 70, 40, 0.18);
+}
+
+/* Store-specific border colors */
+.material-card[data-store="Whole Foods"] {
+  border-color: #00674f;
+  border-width: 4px;
+}
+
+.material-card[data-store="Safeway"] {
+  border-color: #e31837;
+  border-width: 4px;
+}
+
+.material-card[data-store="Ranch99"] {
+  border-color: #ff9500;
+  border-width: 4px;
+}
+
+/* Store badge with logo/text */
+.material-card::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 50px;
+  height: 50px;
+  z-index: 10;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+}
+
+.material-card[data-store="Whole Foods"]::after {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"><circle cx="25" cy="25" r="24" fill="%2300674f"/><text x="25" y="30" font-size="14" font-weight="700" fill="white" text-anchor="middle" font-family="Arial, sans-serif">WF</text></svg>');
+}
+
+.material-card[data-store="Safeway"]::after {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"><circle cx="25" cy="25" r="24" fill="%23e31837"/><text x="25" y="32" font-size="16" font-weight="700" fill="white" text-anchor="middle" font-family="Arial, sans-serif">S</text></svg>');
+}
+
+.material-card[data-store="Ranch99"]::after {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"><rect width="50" height="50" rx="25" fill="%23ff9500"/><text x="25" y="32" font-size="14" font-weight="700" fill="white" text-anchor="middle" font-family="Arial, sans-serif">99</text></svg>');
 }
 
 .material-card img {
   width: 100%;
-  height: 140px;
+  height: 160px;
   object-fit: cover;
   display: block;
+  position: relative;
+}
+
+/* Store-specific image overlays */
+.material-card[data-store="Whole Foods"] img {
+  border-bottom: 4px solid #00674f;
+}
+
+.material-card[data-store="Safeway"] img {
+  border-bottom: 4px solid #e31837;
+}
+
+.material-card[data-store="Ranch99"] img {
+  border-bottom: 4px solid #ff9500;
 }
 
 .material-body {
@@ -287,6 +371,27 @@ button#view-dish {
   margin: 0;
   color: #7a6f62;
   font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+  display: inline-block;
+  background: rgba(214, 185, 143, 0.2);
+  font-size: 0.85rem;
+}
+
+/* Store-specific label colors */
+.material-card[data-store="Whole Foods"] .material-store {
+  color: #00674f;
+  background: rgba(0, 103, 79, 0.1);
+}
+
+.material-card[data-store="Safeway"] .material-store {
+  color: #e31837;
+  background: rgba(227, 24, 55, 0.1);
+}
+
+.material-card[data-store="Ranch99"] .material-store {
+  color: #ff9500;
+  background: rgba(255, 149, 0, 0.1);
 }
 
 .material-brand {

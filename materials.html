@@ -26,6 +26,29 @@
           <div>
             <h2>材料清单 / Materials Catalog</h2>
             <p class="helper">所有材料均与菜谱共享同一数据 / Shared data with dish pages.</p>
+            <div class="store-legend">
+              <span class="legend-item">
+                <svg width="24" height="24" style="flex-shrink: 0;">
+                  <circle cx="12" cy="12" r="11" fill="#00674f"/>
+                  <text x="12" y="16" font-size="10" font-weight="700" fill="white" text-anchor="middle" font-family="Arial, sans-serif">WF</text>
+                </svg>
+                Whole Foods / 全食超市
+              </span>
+              <span class="legend-item">
+                <svg width="24" height="24" style="flex-shrink: 0;">
+                  <circle cx="12" cy="12" r="11" fill="#e31837"/>
+                  <text x="12" y="17" font-size="12" font-weight="700" fill="white" text-anchor="middle" font-family="Arial, sans-serif">S</text>
+                </svg>
+                Safeway / 西夫韦
+              </span>
+              <span class="legend-item">
+                <svg width="24" height="24" style="flex-shrink: 0;">
+                  <rect width="24" height="24" rx="12" fill="#ff9500"/>
+                  <text x="12" y="17" font-size="10" font-weight="700" fill="white" text-anchor="middle" font-family="Arial, sans-serif">99</text>
+                </svg>
+                Ranch 99 / 大华超市
+              </span>
+            </div>
           </div>
           <div class="materials-filter">
             <label for="store-filter">门店 / Store</label>
@@ -41,7 +64,27 @@
       </section>
     </main>
 
+    <script>
+      // Pre-check before loading
+      console.log('Page loaded, about to load scripts');
+      window.addEventListener('error', function(e) {
+        console.error('Global error:', e.error, e.message, e.filename, e.lineno);
+        const grid = document.getElementById('materials-grid');
+        if (grid && grid.innerHTML.trim() === '') {
+          grid.innerHTML = '<p style="color: red;">错误：' + e.message + '<br/>Error: ' + e.message + '</p>';
+        }
+      });
+    </script>
     <script src="data.js"></script>
+    <script>
+      console.log('data.js loaded, window.DATA =', window.DATA);
+      console.log('MATERIALS count:', window.DATA?.MATERIALS?.length);
+      if (!window.DATA || !window.DATA.MATERIALS || window.DATA.MATERIALS.length === 0) {
+        console.error('DATA not loaded correctly!');
+        document.getElementById('materials-grid').innerHTML = 
+          '<p style="color: red;">数据加载失败 / Data failed to load. Check console for errors.</p>';
+      }
+    </script>
     <script src="materials.js"></script>
   </body>
 </html>
