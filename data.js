@@ -8,10 +8,19 @@ console.log('data.js: Starting to load...');
 // Load materials from individual store files (database simulation)
 // This modular approach makes it easier to maintain and update store-specific data
 
-// Placeholder for materials - will be populated from store files
-const MATERIALS = [];
+// Merge materials from all store databases
+// Use an IIFE to avoid global variable conflicts
+(function() {
+  const MATERIALS = [
+    ...(typeof WHOLEFOODS_MATERIALS !== 'undefined' ? WHOLEFOODS_MATERIALS : []),
+    ...(typeof SAFEWAY_MATERIALS !== 'undefined' ? SAFEWAY_MATERIALS : []),
+    ...(typeof RANCH99_MATERIALS !== 'undefined' ? RANCH99_MATERIALS : []),
+    ...(typeof TRADERJOES_MATERIALS !== 'undefined' ? TRADERJOES_MATERIALS : [])
+  ];
 
-const DISHES = [
+  console.log('data.js: Merged materials from store databases:', MATERIALS.length);
+
+  const DISHES = [
   {
     name: "麻婆豆腐 (Mapo Tofu)",
     image: "assets/mapo-tofu.jpg",
@@ -174,25 +183,60 @@ const DISHES = [
   }
 ];
 
-// Utility functions
-function getMaterialById(id) {
-  return MATERIALS.find((m) => m.id === id);
-}
+  // Utility functions
+  function getMaterialById(id) {
+    return MATERIALS.find((m) => m.id === id);
+  }
 
-function getMaterialsByStore(store) {
-  return MATERIALS.filter((m) => m.store === store);
-}
+  function getMaterialsByStore(store) {
+    return MATERIALS.filter((m) => m.store === store);
+  }
 
-function getAllStores() {
-  return [...new Set(MATERIALS.map((m) => m.store))];
-}
+  function getAllStores() {
+    return [...new Set(MATERIALS.map((m) => m.store))];
+  }
 
-window.DATA = {
-  MATERIALS,
-  DISHES,
-  getMaterialById,
-  getMaterialsByStore,
-  getAllStores
-};
+  // Verify all dish materials exist - add dummy materials if missing
+  const allMaterialIds = new Set(MATERIALS.map(m => m.id));
+  const missingMaterials = [];
+  
+  DISHES.forEach(dish => {
+    dish.materialIds.forEach(id => {
+      if (!allMaterialIds.has(id) && !missingMaterials.find(m => m.id === id)) {
+        console.warn(`⚠️ Missing material: ${id} (needed by ${dish.name})`);
+        // Create dummy material
+        const dummyMaterial = {
+          id: id,
+          nameCn: id.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+          nameEn: id.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+          brand: 'Generic',
+          store: 'Whole Foods',
+          price: 0.00,
+          unit: 'unit',
+          image: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Crect width="200" height="200" fill="%23ddd"/%3E%3Ctext x="100" y="100" text-anchor="middle" fill="%23666" font-size="14"%3ENo Image%3C/text%3E%3C/svg%3E'
+        };
+        missingMaterials.push(dummyMaterial);
+        MATERIALS.push(dummyMaterial);
+        allMaterialIds.add(id);
+      }
+    });
+  });
+  
+  if (missingMaterials.length > 0) {
+    console.warn(`⚠️ Added ${missingMaterials.length} dummy materials:`, missingMaterials.map(m => m.id));
+  }
 
-console.log('data.js: Finished loading. Materials count:', MATERIALS.length, 'Dishes count:', DISHES.length);
+  // Export to window.DATA
+  window.DATA = {
+    MATERIALS,
+    DISHES,
+    getMaterialById,
+    getMaterialsByStore,
+    getAllStores
+  };
+
+  console.log('data.js: Finished loading. Materials count:', MATERIALS.length, 'Dishes count:', DISHES.length);
+  if (missingMaterials.length > 0) {
+    console.log('⚠️ Note: Some materials were auto-generated. Please add them to store data files.');
+  }
+})(); // End of IIFE

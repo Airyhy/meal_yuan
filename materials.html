@@ -124,25 +124,6 @@
     <script src="ranch99-data.js"></script>
     <script src="traderjoes-data.js"></script>
     <script src="data.js"></script>
-    <script>
-      // Merge materials from all stores into main DATA object
-      if (typeof WHOLEFOODS_MATERIALS !== 'undefined' && window.DATA) {
-        window.DATA.MATERIALS = [
-          ...WHOLEFOODS_MATERIALS,
-          ...SAFEWAY_MATERIALS,
-          ...RANCH99_MATERIALS,
-          ...TRADERJOES_MATERIALS
-        ];
-        console.log('✓ Loaded materials from 4 store databases:', window.DATA.MATERIALS.length);
-      }
-      
-      // Validate data load
-      if (!window.DATA || !window.DATA.MATERIALS || window.DATA.MATERIALS.length === 0) {
-        console.error('DATA not loaded correctly!');
-        document.getElementById('materials-grid').innerHTML = 
-          '<p style="color: red;">数据加载失败 / Data failed to load. Check console for errors.</p>';
-      }
-    </script>
     <script src="materials.js"></script>
   </body>
 </html>

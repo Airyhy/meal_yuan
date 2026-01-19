@@ -72,18 +72,6 @@
     <script src="ranch99-data.js"></script>
     <script src="traderjoes-data.js"></script>
     <script src="data.js"></script>
-    <script>
-      // Merge materials from all stores into main DATA object
-      if (typeof WHOLEFOODS_MATERIALS !== 'undefined' && window.DATA) {
-        window.DATA.MATERIALS = [
-          ...WHOLEFOODS_MATERIALS,
-          ...SAFEWAY_MATERIALS,
-          ...RANCH99_MATERIALS,
-          ...TRADERJOES_MATERIALS
-        ];
-        console.log('✓ Loaded materials from 4 store databases:', window.DATA.MATERIALS.length);
-      }
-    </script>
     <script src="app.js"></script>
   </body>
 </html>

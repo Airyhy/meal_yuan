@@ -1,6 +1,3 @@
-let DISHES = [];
-let MATERIALS = [];
-
 const dishGallery = document.getElementById("dish-gallery");
 const addDishButton = document.getElementById("add-dish");
 const stepsList = document.getElementById("dish-steps");
@@ -12,6 +9,10 @@ const clearDinnerButton = document.getElementById("clear-dinner");
 
 const dinnerSelection = [];
 let activeDish = null;
+
+// Get DISHES and MATERIALS from window.DATA (loaded by data.js)
+let DISHES = [];
+let MATERIALS = [];
 
 function createFallbackImage(label) {
   const safeLabel = label.replace(/&/g, "&amp;").replace(/</g, "&lt;");
@@ -37,12 +38,31 @@ function createFallbackImage(label) {
 }
 
 function renderDishCards() {
+  console.log('=== renderDishCards() ===');
+  console.log('DISHES:', DISHES);
+  console.log('DISHES.length:', DISHES ? DISHES.length : 'DISHES is undefined');
+  
+  // Add visible debug info to page
+  if (!dishGallery) {
+    alert('ERROR: dishGallery element not found!');
+    return;
+  }
+  
   if (!DISHES || DISHES.length === 0) {
-    dishGallery.innerHTML =
-      "<p>未加载到菜品数据，请刷新页面 / No dish data loaded, please refresh.</p>";
+    dishGallery.innerHTML = `
+      <div style="background: #ffe0e0; padding: 20px; border-radius: 8px; margin: 20px 0;">
+        <h3 style="color: red;">⚠️ Debug Info:</h3>
+        <p><strong>DISHES:</strong> ${DISHES ? DISHES.length + ' items' : 'undefined'}</p>
+        <p><strong>window.DATA:</strong> ${window.DATA ? 'exists' : 'undefined'}</p>
+        <p><strong>window.DATA.DISHES:</strong> ${window.DATA && window.DATA.DISHES ? window.DATA.DISHES.length + ' items' : 'undefined'}</p>
+        <p style="color: red; font-weight: bold;">未加载到菜品数据 / No dish data loaded</p>
+      </div>
+    `;
     return;
   }
 
+  console.log('Rendering', DISHES.length, 'dishes...');
+  
   dishGallery.innerHTML = DISHES.map(
     (dish) => `
       <article class="dish-card" data-dish="${dish.name}">
@@ -54,6 +74,8 @@ function renderDishCards() {
       </article>
     `
   ).join("");
+  
+  console.log('Rendered HTML length:', dishGallery.innerHTML.length);
 
   dishGallery.querySelectorAll(".dish-card img").forEach((img) => {
     img.addEventListener("error", () => {
@@ -125,14 +147,25 @@ function getMaterialById(id) {
 
 function getMaterialsByStore(materialIds) {
   const grouped = {};
+  const missingIds = [];
+  
   materialIds.forEach((id) => {
     const item = getMaterialById(id);
-    if (!item) return;
+    if (!item) {
+      missingIds.push(id);
+      console.warn(`⚠️ Material not found: ${id}`);
+      return;
+    }
     if (!grouped[item.store]) {
       grouped[item.store] = [];
     }
     grouped[item.store].push(item);
   });
+  
+  if (missingIds.length > 0) {
+    console.error(`❌ Missing ${missingIds.length} materials for this dish:`, missingIds);
+  }
+  
   return grouped;
 }
 
@@ -214,17 +247,27 @@ function loadData() {
   const data = window.DATA || { DISHES: [], MATERIALS: [] };
   DISHES = Array.isArray(data.DISHES) ? data.DISHES : [];
   MATERIALS = Array.isArray(data.MATERIALS) ? data.MATERIALS : [];
+  console.log('Loaded DISHES:', DISHES.length, 'MATERIALS:', MATERIALS.length);
 }
 
 function initPage() {
+  console.log('=== initPage() called ===');
   loadData();
+  console.log('After loadData - DISHES:', DISHES);
+  console.log('After loadData - MATERIALS:', MATERIALS.length);
+  console.log('dishGallery element:', dishGallery);
+  
   renderDishCards();
 
   if (!DISHES.length) {
+    console.error('No DISHES found after loadData!');
     stepsList.innerHTML = "";
     materialsGrid.innerHTML = "";
+    dishGallery.innerHTML = '<p style="color: red; padding: 20px;">❌ 数据加载失败：未找到菜品数据 / No dishes found. Please check console.</p>';
     return;
   }
+  
+  console.log('DISHES loaded successfully:', DISHES.length);
 
   activeDish = DISHES[0];
   updateActiveCard();
