@@ -9,6 +9,7 @@
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap"
     />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="dish-detail.css" />
   </head>
   <body>
     <main class="container">
@@ -23,38 +24,24 @@
 
       <section class="card">
         <h2>1) 选择菜品 / Choose a dish</h2>
-        <p class="helper">点击图片预览步骤与材料 / Click a photo to preview steps and ingredients.</p>
+        <p class="helper">点击图片查看详细菜谱 / Click a photo to view detailed recipe.</p>
         <div id="dish-gallery" class="dish-gallery"></div>
-        <div class="primary-actions">
-          <button id="add-dish" type="button">加入晚餐 / Add to dinner</button>
+      </section>
+
+      <section class="card">
+        <h2>2) 晚餐规划 / Big dinner plan</h2>
+        <div class="dinner-section">
+          <h3>已选菜品 / Selected dishes</h3>
+          <ul id="selected-dishes" class="chip-list"></ul>
         </div>
-      </section>
-
-      <section class="card">
-        <h2>2) 关键步骤 / Key steps</h2>
-        <ol id="dish-steps" class="steps"></ol>
-      </section>
-
-      <section class="card">
-        <h2>3) 按超市分类的材料 / Materials by store</h2>
-        <div class="store-grid" id="dish-materials"></div>
-      </section>
-
-      <section class="card">
-        <h2>4) 晚餐规划 / Big dinner plan</h2>
+        
         <div class="dinner-actions">
-          <button id="generate-list" type="button">生成合并清单 / Generate combined list</button>
           <button id="clear-dinner" type="button">清空晚餐 / Clear dinner</button>
         </div>
-        <div class="dinner-layout">
-          <div>
-            <h3>已选菜品 / Selected dishes</h3>
-            <ul id="selected-dishes" class="chip-list"></ul>
-          </div>
-          <div>
-            <h3>合并购物清单 / Combined grocery list</h3>
-            <div class="store-grid" id="combined-materials"></div>
-          </div>
+        
+        <div class="grocery-section">
+          <h3>合并购物清单 / Combined grocery list</h3>
+          <div id="combined-materials"></div>
         </div>
       </section>
 
@@ -65,6 +52,20 @@
         </p>
       </footer>
     </main>
+
+    <!-- Dish Detail Modal -->
+    <div id="dish-detail-modal" class="dish-detail-modal">
+      <div class="dish-detail-content">
+        <button class="dish-detail-close" onclick="closeDishDetail()">×</button>
+        <div id="dish-detail-body"></div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast-notification" class="toast-notification">
+      <span class="toast-icon">✅</span>
+      <span class="toast-message"></span>
+    </div>
 
     <!-- Load store data files (simulating 4 separate database tables) -->
     <script src="wholefoods-data.js"></script>

@@ -514,11 +514,33 @@ button#view-dish {
   font-size: 1.1rem;
 }
 
+.dinner-section {
+  margin-bottom: 24px;
+}
+
+.dinner-section h3 {
+  margin: 0 0 16px 0;
+  font-family: "Playfair Display", serif;
+  font-size: 1.3rem;
+  color: #4b3f31;
+}
+
 .dinner-actions {
   display: flex;
-  flex-wrap: wrap;
+  justify-content: center;
   gap: 12px;
-  margin-bottom: 16px;
+  margin: 24px 0;
+}
+
+.grocery-section {
+  margin-top: 32px;
+}
+
+.grocery-section h3 {
+  margin: 0 0 20px 0;
+  font-family: "Playfair Display", serif;
+  font-size: 1.4rem;
+  color: #4b3f31;
 }
 
 .dinner-layout {
@@ -533,15 +555,100 @@ button#view-dish {
   margin: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 12px;
+  min-height: 60px;
+  padding: 16px;
+  background: #fafaf8;
+  border-radius: 12px;
+}
+
+.chip-list:empty::after {
+  content: "暂无选择 / No dishes selected yet";
+  color: #999;
+  font-style: italic;
 }
 
 .chip {
-  background: #efe6d7;
-  color: #5a4a3a;
-  border-radius: 999px;
-  padding: 6px 12px;
+  background: linear-gradient(135deg, #8b6f47 0%, #a68456 100%);
+  color: white;
+  border-radius: 24px;
+  padding: 12px 16px;
   font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 8px rgba(139, 111, 71, 0.2);
+  transition: all 0.2s;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px; /* iOS minimum touch target */
+  -webkit-tap-highlight-color: transparent; /* Remove blue highlight on tap */
+}
+
+.chip-text {
+  display: inline-block;
+}
+
+.chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.chip-remove svg {
+  display: block;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+/* Hover for desktop */
+@media (hover: hover) and (pointer: fine) {
+  .chip:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 111, 71, 0.3);
+    background: linear-gradient(135deg, #a68456 0%, #8b6f47 100%);
+  }
+  
+  .chip:hover .chip-remove {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+  }
+}
+
+/* Active state for all devices */
+.chip:active {
+  transform: scale(0.95);
+}
+
+.chip:active .chip-remove {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  .chip {
+    padding: 14px 18px;
+    font-size: 1rem;
+    min-height: 48px; /* Android minimum touch target */
+    gap: 10px;
+  }
+  
+  .chip-remove {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .chip-remove svg {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 @media (min-width: 900px) {
@@ -775,6 +882,233 @@ button#view-dish {
 
   .dish-gallery {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ========================================
+   GROCERY LIST TABLE STYLES
+   ======================================== */
+
+.grocery-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.grocery-table thead {
+  background: linear-gradient(135deg, #8b6f47 0%, #a68456 100%);
+  color: white;
+}
+
+.grocery-table th {
+  padding: 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.grocery-table tbody tr {
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s;
+}
+
+.grocery-table tbody tr:hover {
+  background-color: #fafaf8;
+}
+
+.grocery-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.grocery-table td {
+  padding: 16px;
+  vertical-align: top;
+}
+
+.item-name {
+  font-size: 1rem;
+}
+
+.item-name strong {
+  color: #2c2c2c;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.item-name small {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.dish-list {
+  color: #555;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  max-width: 300px;
+}
+
+.store-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.item-price {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #8b6f47;
+  text-align: right;
+}
+
+/* Store-specific row styling */
+.grocery-table tbody tr.store-WholeFoods {
+  border-left: 4px solid #4a7c4e;
+}
+
+.grocery-table tbody tr.store-WholeFoods .store-name {
+  color: #4a7c4e;
+}
+
+.grocery-table tbody tr.store-Safeway {
+  border-left: 4px solid #cc1f2d;
+}
+
+.grocery-table tbody tr.store-Safeway .store-name {
+  color: #cc1f2d;
+}
+
+.grocery-table tbody tr.store-Ranch99 {
+  border-left: 4px solid #ff9500;
+}
+
+.grocery-table tbody tr.store-Ranch99 .store-name {
+  color: #ff9500;
+}
+
+.grocery-table tbody tr.store-TraderJoes {
+  border-left: 4px solid #007A87;
+}
+
+.grocery-table tbody tr.store-TraderJoes .store-name {
+  color: #007A87;
+}
+
+.grocery-summary {
+  padding: 16px;
+  background: #f5f3ee;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 1.05rem;
+  color: #5a4a3a;
+  margin-top: 16px;
+}
+
+/* Mobile responsive table */
+@media (max-width: 768px) {
+  .grocery-table {
+    font-size: 0.85rem;
+  }
+
+  .grocery-table th,
+  .grocery-table td {
+    padding: 12px 8px;
+  }
+
+  .item-name strong {
+    font-size: 0.9rem;
+  }
+
+  .item-name small {
+    font-size: 0.75rem;
+  }
+
+  .dish-list {
+    font-size: 0.8rem;
+    max-width: 150px;
+  }
+
+  .store-name {
+    font-size: 0.8rem;
+  }
+
+  .item-price {
+    font-size: 1rem;
+  }
+
+  .grocery-summary {
+    font-size: 0.9rem;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grocery-table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .grocery-table thead {
+    display: none;
+  }
+
+  .grocery-table tbody,
+  .grocery-table tr,
+  .grocery-table td {
+    display: block;
+  }
+
+  .grocery-table tr {
+    margin-bottom: 20px;
+    border: 2px solid #f0f0f0;
+    border-radius: 12px;
+    padding: 12px;
+    background: white;
+  }
+
+  .grocery-table td {
+    padding: 8px 0;
+    border: none;
+  }
+
+  .grocery-table td::before {
+    content: attr(class);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    color: #8b6f47;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .item-name::before {
+    content: "材料 / ITEM";
+  }
+
+  .dish-list::before {
+    content: "菜品 / DISHES";
+  }
+
+  .store-name::before {
+    content: "商店 / STORE";
+  }
+
+  .item-price::before {
+    content: "价格 / PRICE";
+  }
+
+  .dish-list {
+    max-width: 100%;
+  }
+
+  .item-price {
+    text-align: left;
+    font-size: 1.2rem;
   }
 }
 
