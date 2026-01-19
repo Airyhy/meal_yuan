@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Yuan & Yuan Dish - Materials</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="hero">
+        <nav class="top-nav">
+          <a class="nav-link" href="index.html">菜谱主页 / Dishes</a>
+          <a class="nav-link active" href="materials.html">材料管理 / Materials</a>
+        </nav>
+        <h1>材料管理 / Materials</h1>
+        <p>统一管理材料价格与门店信息 / Manage materials, prices, and store locations.</p>
+      </header>
+
+      <section class="card">
+        <div class="materials-toolbar">
+          <div>
+            <h2>材料清单 / Materials Catalog</h2>
+            <p class="helper">所有材料均与菜谱共享同一数据 / Shared data with dish pages.</p>
+          </div>
+          <div class="materials-filter">
+            <label for="store-filter">门店 / Store</label>
+            <select id="store-filter">
+              <option value="all">全部 / All</option>
+              <option value="Whole Foods">Whole Foods / 全食超市</option>
+              <option value="Costco">Costco / 好市多</option>
+              <option value="Ranch99">Ranch 99 / 大华超市</option>
+            </select>
+          </div>
+        </div>
+        <div id="materials-grid" class="materials-grid"></div>
+      </section>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="materials.js"></script>
+  </body>
+</html>
