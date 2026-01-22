@@ -1,1 +1,4 @@
-your jon is to create PR and commit within the github, please use descriptive title and content, no need to stack all commits into single 1
+Your job is to:
+1. Create a descriptive commit with the current changes
+2. Push to a new branch
+3. Then guide me to create a PR using Cursor's built-in GitHub integration by telling me which Cursor command to run
