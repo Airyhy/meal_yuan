@@ -1,0 +1,173 @@
+"""
+Python Backend Architecture Diagram
+
+                                Yuan & Yuan Dish - Full Stack Architecture
+                                ==========================================
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                                   FRONTEND                                      │
+│                                                                                 │
+│  ┌──────────────────────────────────────────────────────────────────────────┐ │
+│  │  Browser (http://localhost:5000/index-backend.html)                       │ │
+│  │                                                                            │ │
+│  │  ┌───────────────┐    ┌────────────────┐    ┌─────────────────────────┐ │ │
+│  │  │   index.html  │───▶│  app.js        │───▶│  api-client.js          │ │ │
+│  │  │   (UI)        │    │  (Logic)       │    │  (API Integration)      │ │ │
+│  │  └───────────────┘    └────────────────┘    └──────────┬──────────────┘ │ │
+│  │                                                         │                 │ │
+│  │                                                         │                 │ │
+│  │                                                         │ HTTP Requests   │ │
+│  │                                                         │ JSON Data       │ │
+│  └─────────────────────────────────────────────────────────┼─────────────────┘ │
+└───────────────────────────────────────────────────────────┼───────────────────┘
+                                                            │
+                                                            │ CORS Enabled
+                                                            ▼
+┌───────────────────────────────────────────────────────────────────────────────┐
+│                              PYTHON BACKEND                                    │
+│                         (Flask Server - Port 5000)                            │
+│                                                                               │
+│  ┌─────────────────────────────────────────────────────────────────────────┐ │
+│  │                          app.py (Flask App)                              │ │
+│  │                                                                           │ │
+│  │  ┌──────────────────────────────────────────────────────────────┐       │ │
+│  │  │              REST API Routes                                 │       │ │
+│  │  │                                                               │       │ │
+│  │  │  GET  /api/materials            → Get all materials          │       │ │
+│  │  │  GET  /api/materials/{id}       → Get specific material      │       │ │
+│  │  │  POST /api/materials            → Add new material           │       │ │
+│  │  │                                                               │       │ │
+│  │  │  GET  /api/dishes               → Get all dishes             │       │ │
+│  │  │  GET  /api/dishes/{id}          → Get specific dish          │       │ │
+│  │  │  GET  /api/dishes/by-name/{n}   → Get dish by name           │       │ │
+│  │  │                                                               │       │ │
+│  │  │  GET  /api/stores               → Get all stores             │       │ │
+│  │  │                                                               │       │ │
+│  │  │  GET  /api/preferences/{u}/{t}  → Get user preference        │       │ │
+│  │  │  POST /api/preferences/{u}/{t}  → Save user preference       │       │ │
+│  │  │                                                               │       │ │
+│  │  │  GET  /api/dinner-plan/{u}      → Get dinner plan            │       │ │
+│  │  │  POST /api/dinner-plan/{u}      → Add to dinner plan         │       │ │
+│  │  │  DEL  /api/dinner-plan/{u}/{i}  → Remove from plan           │       │ │
+│  │  │  DEL  /api/dinner-plan/{u}      → Clear dinner plan          │       │ │
+│  │  │                                                               │       │ │
+│  │  │  GET  /api/manual-items/{u}     → Get manual items           │       │ │
+│  │  │  POST /api/manual-items/{u}     → Add manual item            │       │ │
+│  │  │  DEL  /api/manual-items/{u}/{i} → Delete manual item         │       │ │
+│  │  │                                                               │       │ │
+│  │  │  GET  /api/health               → Health check               │       │ │
+│  │  └──────────────────────────────────────────────────────────────┘       │ │
+│  │                                    │                                     │ │
+│  │                                    │                                     │ │
+│  │                                    ▼                                     │ │
+│  │  ┌──────────────────────────────────────────────────────────────┐       │ │
+│  │  │                    models.py (ORM Models)                     │       │ │
+│  │  │                                                               │       │ │
+│  │  │  • Material           - Ingredients/materials                │       │ │
+│  │  │  • Dish               - Recipes with steps                   │       │ │
+│  │  │  • UserPreference     - User settings                        │       │ │
+│  │  │  • DinnerPlan         - Selected dishes                      │       │ │
+│  │  │  • ManualGroceryItem  - Custom items                         │       │ │
+│  │  └──────────────────────────────────────────────────────────────┘       │ │
+│  │                                    │                                     │ │
+│  │                                    │ SQLAlchemy ORM                      │ │
+│  │                                    ▼                                     │ │
+│  └─────────────────────────────────────────────────────────────────────────┘ │
+└───────────────────────────────────────┼───────────────────────────────────────┘
+                                        │
+                                        │ SQL Queries
+                                        ▼
+┌───────────────────────────────────────────────────────────────────────────────┐
+│                              DATABASE LAYER                                    │
+│                                                                               │
+│  ┌─────────────────────────────────────────────────────────────────────────┐ │
+│  │                    SQLite Database (recipes.db)                          │ │
+│  │                                                                           │ │
+│  │  ┌────────────────┐  ┌────────────────┐  ┌───────────────────────┐     │ │
+│  │  │   materials    │  │    dishes      │  │  user_preferences     │     │ │
+│  │  │   (36 rows)    │  │    (5 rows)    │  │                       │     │ │
+│  │  └────────────────┘  └────────────────┘  └───────────────────────┘     │ │
+│  │                                                                           │ │
+│  │  ┌────────────────┐  ┌─────────────────────────┐                        │ │
+│  │  │ dinner_plans   │  │ manual_grocery_items    │                        │ │
+│  │  │                │  │                         │                        │ │
+│  │  └────────────────┘  └─────────────────────────┘                        │ │
+│  └─────────────────────────────────────────────────────────────────────────┘ │
+└───────────────────────────────────────────────────────────────────────────────┘
+
+
+                            Data Flow Examples
+                            ==================
+
+1. User clicks on a dish card:
+   Browser → app.js → api-client.js → GET /api/dishes/{id} → Flask → DB → Response
+   
+2. User adds dish to dinner plan:
+   Browser → app.js → api-client.js → POST /api/dinner-plan/{user_id} → Flask → DB
+   
+3. User marks item as "already have":
+   Browser → app.js → api-client.js → POST /api/preferences/{user_id}/item_states → DB
+   
+4. User opens app:
+   Browser → api-client.js → GET /api/health → Flask (health check)
+   Browser → api-client.js → GET /api/materials → Flask → DB → Display 36 materials
+   Browser → api-client.js → GET /api/dishes → Flask → DB → Display 5 dishes
+
+
+                        Key Benefits of New Architecture
+                        =================================
+
+✅ Data Persistence       → User data saved to database (not just browser)
+✅ Multi-device Access    → Can access same data from different devices
+✅ Data Backup           → Database can be backed up and restored
+✅ Scalability           → Can easily add more features and APIs
+✅ User Management       → Foundation for multi-user support
+✅ API First             → Other apps can integrate with your recipes
+✅ Offline Support       → Original localStorage mode still works
+
+
+                            Technology Stack
+                            ===============
+
+Frontend:
+  • HTML5, CSS3, JavaScript (ES6+)
+  • Vanilla JS (no framework dependencies)
+  • Responsive design (mobile-first)
+
+Backend:
+  • Python 3.9+
+  • Flask 3.0.0 (web framework)
+  • Flask-SQLAlchemy 3.1.1 (ORM)
+  • Flask-CORS 4.0.0 (cross-origin support)
+
+Database:
+  • SQLite 3 (file-based SQL database)
+  • 5 tables, relational schema
+
+Deployment:
+  • Development server: Flask built-in
+  • Production ready: Can deploy to Heroku, AWS, DigitalOcean, etc.
+
+
+                        File Size Comparison
+                        ====================
+
+Original (Frontend Only):
+  • index.html:      ~2 KB
+  • app.js:         ~45 KB
+  • data.js:        ~10 KB
+  • Total:          ~57 KB
+
+New (Full Stack):
+  • Frontend:       ~57 KB (same)
+  • Backend:        ~27 KB (new)
+  • Database:       ~40 KB (new)
+  • Total:         ~124 KB
+
+Added value for ~67 KB:
+  ✅ Persistent storage
+  ✅ REST API
+  ✅ Multi-user support foundation
+  ✅ Data backup capability
+  ✅ Scalability
+"""

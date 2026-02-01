@@ -9,7 +9,7 @@ The materials data has been split into **4 separate files** to simulate a databa
 ## File Structure / 文件结构
 
 ```
-simple-web-app/
+meal_yuan/
 ├── wholefoods-data.js    (23 items / 商品)
 ├── safeway-data.js       (28 items / 商品)
 ├── ranch99-data.js       (27 items / 商品)
