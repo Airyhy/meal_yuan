@@ -8,7 +8,14 @@ import json
 import os
 
 def create_app():
-    app = Flask(__name__, static_folder='..', static_url_path='')
+    # Configure Flask to use proper static and template folders
+    import os
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(base_dir)
+    
+    app = Flask(__name__,
+                static_folder=os.path.join(parent_dir, 'static'),
+                template_folder=os.path.join(parent_dir, 'templates'))
     
     # Configuration
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///recipes.db'
@@ -24,7 +31,8 @@ def create_app():
     @app.route('/')
     def serve_index():
         """Serve the main index.html"""
-        return send_from_directory('..', 'index.html')
+        from flask import render_template
+        return render_template('index.html')
     
     @app.route('/api/materials', methods=['GET'])
     def get_materials():

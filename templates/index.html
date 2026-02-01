@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Yuan - Recipe & Meal Planning</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="/static/dish-detail.css">
+</head>
+<body>
+    <header class="hero">
+        <div class="header-content">
+            <h1>Meal Yuan / 袁与袁家常菜</h1>
+            <p class="tagline">Recipe planning with Python backend / 基于 Python 后端的菜谱规划</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="card">
+            <h2>1) Choose a Dish / 选择菜品</h2>
+            <p class="helper">Click a dish to view recipe / 点击查看菜谱</p>
+            <div id="dish-gallery" class="dish-gallery"></div>
+        </section>
+
+        <section class="card">
+            <h2>2) Dinner Plan / 晚餐规划</h2>
+            <div class="dinner-section">
+                <h3>Selected Dishes / 已选菜品</h3>
+                <ul id="selected-dishes" class="chip-list"></ul>
+            </div>
+            
+            <div class="dinner-actions">
+                <button id="clear-dinner" type="button">Clear / 清空</button>
+            </div>
+            
+            <div class="grocery-section">
+                <h3>Shopping List / 购物清单</h3>
+                <div id="combined-materials"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Dish Detail Modal -->
+    <div id="dish-detail-modal" class="dish-detail-modal">
+        <div class="dish-detail-content">
+            <button class="dish-detail-close" onclick="closeDishDetail()">×</button>
+            <div id="dish-detail-body"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast-notification" class="toast-notification">
+        <span class="toast-icon">✅</span>
+        <span class="toast-message"></span>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
