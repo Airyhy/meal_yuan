@@ -125,3 +125,25 @@ class ManualGroceryItem(db.Model):
             'store': self.store,
             'createdAt': self.created_at.isoformat() if self.created_at else None
         }
+
+
+class CompletedDinner(db.Model):
+    """Completed dinners - historical record of meals made"""
+    __tablename__ = 'completed_dinners'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String(100), nullable=False, index=True, default='default')
+    dish_ids = db.Column(db.Text, nullable=False)  # JSON array of dish IDs
+    dish_names = db.Column(db.Text, nullable=False)  # JSON array of dish names
+    notes = db.Column(db.Text)  # Optional notes about the dinner
+    completed_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'userId': self.user_id,
+            'dishIds': json.loads(self.dish_ids) if self.dish_ids else [],
+            'dishNames': json.loads(self.dish_names) if self.dish_names else [],
+            'notes': self.notes,
+            'completedAt': self.completed_at.isoformat() if self.completed_at else None
+        }

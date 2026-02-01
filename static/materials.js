@@ -101,8 +101,15 @@ function renderMaterials() {
 
 // Render single material card
 function renderMaterialCard(material) {
+    const imageUrl = material.image || 'https://via.placeholder.com/150x150/f0f0f0/999999?text=No+Image';
+    const isLocalImage = material.image && material.image.startsWith('assets/');
+    const finalImageUrl = isLocalImage ? `/static/${material.image}` : imageUrl;
+    
     return `
         <div class="material-card" data-id="${material.id}">
+            <div class="material-image">
+                <img src="${finalImageUrl}" alt="${material.nameCn}" loading="lazy">
+            </div>
             <div class="material-info">
                 <div class="material-name">
                     <strong>${material.nameCn}</strong>

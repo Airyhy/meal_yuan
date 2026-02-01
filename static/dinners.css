@@ -24,35 +24,89 @@
 
 .dinner-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
 }
 
 .dinner-card {
     background: #f8f8f8;
     border: 1px solid #e5e5e5;
-    border-radius: 8px;
-    padding: 1.25rem;
+    border-radius: 12px;
+    overflow: hidden;
     transition: all 0.2s;
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
 }
 
 .dinner-card:hover {
     border-color: #2c5f2d;
-    box-shadow: 0 2px 8px rgba(44,95,45,0.1);
-    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(44,95,45,0.15);
+    transform: translateY(-3px);
 }
 
-.dinner-card h4 {
-    margin: 0 0 0.5rem 0;
+.dinner-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: #e5e5e5;
+    position: relative;
+}
+
+.dinner-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.dinner-card:hover .dinner-image img {
+    transform: scale(1.05);
+}
+
+.dish-count {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(44, 95, 45, 0.9);
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.dinner-content {
+    padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.dinner-dishes {
+    margin: 0;
     font-size: 1.1rem;
     color: #333;
+    line-height: 1.4;
 }
 
 .dinner-time {
     margin: 0;
     font-size: 0.9rem;
     color: #666;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.dinner-notes {
+    margin: 0.5rem 0 0 0;
+    font-size: 0.95rem;
+    color: #555;
+    font-style: italic;
+    padding-top: 0.5rem;
+    border-top: 1px solid #e5e5e5;
 }
 
 /* Mobile Responsive */
@@ -63,5 +117,9 @@
     
     .dinner-date-section {
         padding: 1rem;
+    }
+    
+    .dinner-image {
+        height: 180px;
     }
 }

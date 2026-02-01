@@ -3,7 +3,7 @@ Flask application for Recipe and Meal Planning Web Service
 """
 from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
-from models import db, Material, Dish, UserPreference, DinnerPlan, ManualGroceryItem
+from models import db, Material, Dish, UserPreference, DinnerPlan, ManualGroceryItem, CompletedDinner
 import json
 import os
 
@@ -230,6 +230,30 @@ def create_app():
         db.session.commit()
         
         return jsonify({'success': True})
+    
+    # Completed Dinners endpoints
+    @app.route('/api/completed-dinners/<user_id>', methods=['GET'])
+    def get_completed_dinners(user_id):
+        """Get completed dinner history"""
+        dinners = CompletedDinner.query.filter_by(user_id=user_id).order_by(CompletedDinner.completed_at.desc()).all()
+        return jsonify([dinner.to_dict() for dinner in dinners])
+    
+    @app.route('/api/completed-dinners/<user_id>', methods=['POST'])
+    def add_completed_dinner(user_id):
+        """Add a completed dinner to history"""
+        data = request.json
+        
+        dinner = CompletedDinner(
+            user_id=user_id,
+            dish_ids=json.dumps(data.get('dishIds', [])),
+            dish_names=json.dumps(data.get('dishNames', [])),
+            notes=data.get('notes', '')
+        )
+        
+        db.session.add(dinner)
+        db.session.commit()
+        
+        return jsonify(dinner.to_dict()), 201
     
     # Health check endpoint
     @app.route('/api/health', methods=['GET'])
